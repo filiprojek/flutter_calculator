@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import '../widgets/one_button.dart';
 
-class CalculatorScreen extends StatelessWidget {
+class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
+
+  @override
+  _CalculatorScreen createState() => _CalculatorScreen();
+}
+
+class _CalculatorScreen extends State<CalculatorScreen> {
+  String _displayValue = "0";
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,44 @@ class CalculatorScreen extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(snackdemo);
         return;
       }
+
       print(value);
+
+      if (_displayValue == "0") {
+        setState(() {
+          _displayValue = value;
+        });
+        return;
+      }
+
+      if (value == "del") {
+        setState(() {
+          _displayValue = _displayValue.substring(0, _displayValue.length - 1);
+        });
+        return;
+      }
+
+      if (value == "=") {
+        List operators = ["+", "-", "/", "X"];
+        List calcValue = [];
+        int last = 0;
+        for (int i = 0; i < _displayValue.length; i++) {
+          print('found ' + _displayValue[i]);
+          if (operators.asMap().containsValue(_displayValue[i])) {
+            calcValue.add(_displayValue.substring(last + 1, i));
+            calcValue.add(_displayValue[i]);
+            last = i;
+          }
+        }
+
+        calcValue.add(_displayValue.substring(last + 1, _displayValue.length));
+        print(calcValue);
+        return;
+      }
+
+      setState(() {
+        _displayValue += value;
+      });
     }
 
     return Scaffold(
@@ -35,7 +79,7 @@ class CalculatorScreen extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Text(
-                      "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+                      _displayValue,
                       style: TextStyle(fontSize: 32.0),
                       maxLines: 1,
                     ),
