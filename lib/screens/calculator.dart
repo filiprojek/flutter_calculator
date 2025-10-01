@@ -48,7 +48,7 @@ class _CalculatorScreen extends State<CalculatorScreen> {
       if (value == "=") {
         List operators = ["+", "-", "/", "X"];
         List calcValue = [];
-        int last = 0;
+        int last = -1;
         for (int i = 0; i < _displayValue.length; i++) {
           print('found ' + _displayValue[i]);
           if (operators.asMap().containsValue(_displayValue[i])) {
